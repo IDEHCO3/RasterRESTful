@@ -48,6 +48,23 @@ app.get('/tiffs/:tiff_name', function (req, res) {
     res.sendFile(file_name_with_path);
 });
 
+app.get('/tiffs/:tiff_name/describeby', function(req, res){
+    res.set('Content-Type', 'text/json');
+    var base_name = req.params.tiff_name.split('.')[0] + '.json';
+    var jsonld_name = base_name + 'ld';
+    res.set('Link', '<http://'+ req.hostname +'/contexts/' + jsonld_name + '>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"');
+    file_name = __dirname + '/jsons/' + base_name;
+    res.sendFile(file_name);
+});
+
+app.get('/descriptions/:json_name', function (req, res) {
+    res.set('Content-Type', 'text/json');
+    var jsonld_name = req.params.json_name + 'ld';
+    res.set('Link', '<http://'+ req.hostname +'/contexts/' + jsonld_name + '>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"');
+    file_name = __dirname + '/jsons/' + req.params.json_name;
+    res.sendFile(file_name);
+});
+
 app.get('/contexts/:file_name', function (req, res) {
     res.set('Content-Type', 'application/ld+json');
     file_name = __dirname + '/tiffs/' + req.params.file_name.split('.')[0] + '.tif';
@@ -68,15 +85,8 @@ app.get('/contexts/:file_name', function (req, res) {
     }
 });
 
-app.get('/descriptions/:json_name', function (req, res) {
-    res.set('Content-Type', 'text/json');
-    var jsonld_name = req.params.json_name + 'ld';
-    res.set('Link', '<http://'+ req.hostname +'/contexts/' + jsonld_name + '>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"');
-    file_name = __dirname + '/jsons/' + req.params.json_name;
-    res.sendFile(file_name);
-});
-
 server.listen(5096, function () {
   console.log('Example app listening on port 5096!');
 });
+
 
