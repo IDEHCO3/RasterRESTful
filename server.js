@@ -24,7 +24,9 @@ app.get('/tiffs', function (req, res) {
     res.set('Content-Type', 'application/json');
     var url_base = 'http://' + req.hostname + '/tiffs/';
     console.log(tiffs(url_base));
-    res.set('Link', '<' + url_base + '>; rel="http://schema.org/EntryPoint", <http://www.metadados.geo.ibge.gov.br/geonetwork_ibge/srv/por/main.home>; rel="metadata"')
+    var link = '<' + url_base + '>; rel="http://schema.org/EntryPoint", <http://www.metadados.geo.ibge.gov.br/geonetwork_ibge/srv/por/main.home>; rel="metadata"';
+    link += ', <http://' + req.hostname + '/contexts/tiffs.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"';
+    res.set('Link', link)
 
     console.log("path: "+ req.hostname);
     res.send(tiffs(url_base));
